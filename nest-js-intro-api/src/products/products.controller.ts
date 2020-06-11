@@ -10,23 +10,24 @@ export class ProductController {
     ) {}
 
     @Get()
-    getAllProducts(): any {
-        let action = this.prodService.getAllProducts();
-        if(action != null) {
-            return action;
+    async getAllProducts(): Promise<any> {
+        let result = await this.prodService.getAllProducts();
+        if(result != null) {
+            return this.convertForView(result, null);
         } else {
             return 'No Products';
         }
     }
 
     @Get(':id')
-    getProduct(
-        @Param('id') prodId: number
-    ): any {
+    async getProduct(
+        @Param('id') prodId: string
+    ): Promise<any> {
 
         try
         {
-            return this.prodService.getProduct(prodId);
+            const result = await this.prodService.getProduct(prodId);
+            return this.convertForView(null, result);
         }
         catch(error)
         {
@@ -35,13 +36,13 @@ export class ProductController {
     }
 
     @Post()
-    addProducts(
+    async addProducts(
         @Body('title') title: string, 
         @Body('description') desc: string,
         @Body('price') price: number
-        ): any {
+        ): Promise<any> {
         
-        let action = this.prodService.createProduct(title, desc, price);
+        let action = await this.prodService.createProduct(title, desc, price);
         if(action != null) {
             return action;
         } else {
@@ -50,21 +51,42 @@ export class ProductController {
     }
 
     @Patch(':id')
-    updateProduct(
-        @Param('id') prodId: number, 
+    async updateProduct(
+        @Param('id') prodId: string, 
         @Body('title') title: string,
         @Body('description') desc: string,
         @Body('price') price: number
-    ): any {
-        return this.prodService.updateProduct(prodId, title, desc, price);
+    ): Promise<any> {
+        const result = await this.prodService.updateProduct(prodId, title, desc, price);
+        return result;
     }
 
     @Delete(':id')
-    removeProduct(
-        @Param('id') prodId: number
-    ): any {
-        let action = this.prodService.removeProduct(prodId);
+    async removeProduct(
+        @Param('id') prodId: string
+    ): Promise<any> {
+       let action = await this.prodService.removeProduct(prodId);
         return `Successfully deleted "${action.title}" `;
+    }
+
+
+    private convertForView(productArray?: Product[], product?: Product): any {
+        if(productArray) {
+            const viewProducts = productArray.map((prod) => (
+                {id: prod.id, title: prod.title, description: prod.description, price: prod.price}
+            ));
+
+            return viewProducts;
+        }
+
+        if(product) {
+            return {
+                id: product.id,
+                title: product.title,
+                description: product.description,
+                price: product.price
+            }
+        }
     }
 
 }

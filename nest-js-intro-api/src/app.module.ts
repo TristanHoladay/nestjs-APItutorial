@@ -7,7 +7,9 @@ import { ProductsModule } from './products/products.module';
 @Module({
   imports: [
     ProductsModule,
-    MongooseModule.forRoot('mongodb+srv://tholaday:mongoTHEmount777@@@@cluster0-3kud5.mongodb.net/nestjs-demo?retryWrites=true&w=majority')
+    MongooseModule.forRoot(
+      'mongodb+srv://tholaday:///cluster0-3kud5.mongodb.net/nestjs-demo?retryWrites=true&w=majority',
+    ),
   ],
   controllers: [AppController],
   providers: [AppService],

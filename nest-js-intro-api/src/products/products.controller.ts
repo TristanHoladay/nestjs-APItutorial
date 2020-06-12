@@ -36,13 +36,13 @@ export class ProductController {
     }
 
     @Post()
-    async addProducts(
+    addProducts(
         @Body('title') title: string, 
         @Body('description') desc: string,
         @Body('price') price: number
-        ): Promise<any> {
+        ): any {
         
-        let action = await this.prodService.createProduct(title, desc, price);
+        let action = this.prodService.createProduct(title, desc, price);
         if(action != null) {
             return action;
         } else {

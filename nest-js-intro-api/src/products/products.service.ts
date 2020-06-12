@@ -89,7 +89,7 @@ export class ProductService {
     if (result.n > 0) {
       return product;
     } else {
-      throw new NotFoundException(
+      throw new NotFoundException (
         `Could not delete the product: ${product.title}`,
       );
     }

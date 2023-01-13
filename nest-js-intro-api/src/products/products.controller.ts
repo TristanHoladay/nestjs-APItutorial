@@ -11,6 +11,7 @@ export class ProductController {
 
     @Get()
     async getAllProducts(): Promise<any> {
+        console.log('products')
         let result = await this.prodService.getAllProducts();
         if(result != null) {
             return this.convertForView(result, null);
